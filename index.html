@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slot Machine</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1 class="page-title">SLOT MACHINE</h1>
+    <div class="slot-machine-container">
+      <div class="slot-machine">
+        <img src="Image/SlotBack.png" alt="Slot Back" class="slot-back" />
+        <div class="reels">
+          <div class="reel s1"></div>
+          <div class="reel s2"></div>
+          <div class="reel s3"></div>
+        </div>
+        <img src="Image/SlotFront.png" alt="Slot Front" class="slot-front" />
+        <img
+          src="Image/SlotHandle.png"
+          alt="Slot Handle"
+          class="slot-handle"
+          id="handle-btn"
+        />
+      </div>
+      <div class="controls">
+        <img
+          src="Image/SlotButtonTable.png"
+          alt="Button Table"
+          class="button-table"
+        />
+        <img
+          src="Image/SlotButton.png"
+          alt="Spin Button"
+          class="spin-button"
+          id="spin-btn"
+        />
+      </div>
+    </div>
+    <div class="game-stats">
+      <h2 class="stat ul" id="stats-title">
+        <a onclick="resetLocalStorage()" href="javascript:void(0);"
+          >Game Stats</a
+        >
+      </h2>
+      <p class="spins stat">
+        <span class="ul">Number of Spins</span> - - ->
+        <span class="number" id="num-spins">.</span>
+      </p>
+      <p class="win-spins stat">
+        <span class="ul">Wins</span> - - ->
+        <span class="number" id="win-spins">.</span>
+      </p>
+      <p class="lose-spins stat">
+        <span class="ul">Loses</span> - - ->
+        <span class="number" id="lose-spins">.</span>
+      </p>
+      <p class="most-spins stat">
+        <span class="ul">Most Spins</span> - - ->
+        <span class="number" id="most-spins">.</span>
+      </p>
+      <p class="least-spins stat">
+        <span class="ul">Least Spins</span> - - ->
+        <span class="number" id="least-spins">.</span>
+      </p>
+    </div>
+    <footer class="footer-container"></footer>
+    <script src="script.js"></script>
+  </body>
+</html>
