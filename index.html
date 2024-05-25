@@ -8,65 +8,153 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
-    <h1 class="page-title">SLOT MACHINE</h1>
-    <div class="slot-machine-container">
-      <div class="slot-machine">
-        <img src="Image/SlotBack.png" alt="Slot Back" class="slot-back" />
-        <div class="reels">
-          <div class="reel s1"></div>
-          <div class="reel s2"></div>
-          <div class="reel s3"></div>
+       <!-- audio -->
+       <audio id="background-music" loop>
+        <source src="Sound/background-music.mp3" type="audio/mpeg">
+      </audio>
+      <audio id="winning-sound" loop>
+        <source src="Sound/winning-sound.mp3" type="audio/mpeg">
+      </audio>
+      <audio id="spin-sound" loop>
+        <source src="Sound/spin-sound.mp3" type="audio/mpeg">
+      </audio>
+
+      
+    <img src="Image/rays.png" alt="Description of image" class="ray-img" />
+    <div class="body-mini">
+      <div class="header">
+        <div class="stats">
+          <span id="diamond-count" class="stat-number">0</span>
+          <img src="Image/diamond.png" alt="Diamond Icon" class="stat-icon" />
+          <span id="coin-count" class="stat-number">0</span>
+          <img src="Image/coin.png" alt="Coin Icon" class="stat-icon" />
         </div>
-        <img src="Image/SlotFront.png" alt="Slot Front" class="slot-front" />
-        <img
-          src="Image/SlotHandle.png"
-          alt="Slot Handle"
-          class="slot-handle"
-          id="handle-btn"
-        />
       </div>
-      <div class="controls">
-        <img
-          src="Image/SlotButtonTable.png"
-          alt="Button Table"
-          class="button-table"
-        />
-        <img
+      <div class="main-content">
+        <div class="ray">
+        <div class="slot-machine-container">
+          <div class="slot-machine">
+            <img src="Image/SlotBack.png" alt="Slot Back" class="slot-back"/>
+            <div class="lights">
+              <!-- lights on up ray -->
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light1" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light1" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light2" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light2" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light3" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light3" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light4" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light4" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light5" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light5" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light6" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light6" />
+
+              <!-- lights on bottom ray -->
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light7" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light7" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light8" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light8" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light9" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light9" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light10" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light10" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light11" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light11" />
+              <img src="Image/lightoff.png" alt="Light Off" class="light-off light12" />
+              <img src="Image/lighton.png" alt="Light On" class="light-on light12" />
+            </div>
+            <div class="reels">
+              <div class="reel s1"></div>
+              <div class="reel s2"></div>
+              <div class="reel s3"></div>
+            </div>
+            <img
+              src="Image/SlotFront.png"
+              alt="Slot Front"
+              class="slot-front"
+            />
+            <img
+              src="Image/SlotHandle.png"
+              alt="Slot Handle"
+              class="slot-handle"
+              id="handle-btn"
+            />
+          </div>
+          <div class="controls">
+            <img
+              src="Image/SlotButtonTableLong.png"
+              alt="Button Table"
+              class="button-table"
+            />
+          </div>
+          <img
           src="Image/SlotButton.png"
           alt="Spin Button"
           class="spin-button"
           id="spin-btn"
         />
+        </div>
+        <!-- <div class="game-stats">
+          <h2 class="stat ul" id="stats-title">
+            <a onclick="resetLocalStorage()" href="javascript:void(0);"
+              >Game Stats</a
+            >
+          </h2>
+          <p class="spin-time stat">
+            <span class="ul">Spin Time Count</span> - - ->
+            <span class="number" id="spin-time-count">.</span>
+          </p>
+          <p class="win stat">
+            <span class="ul">Wins</span> - - ->
+            <span class="number" id="win-count">.</span>
+          </p>
+          <p class="lose stat">
+            <span class="ul">Loses</span> - - ->
+            <span class="number" id="lose-count">.</span>
+          </p>
+          <p class="gold stat">
+            <span class="ul">Gold</span> - - ->
+            <span class="number" id="gold-count">.</span>
+          </p>
+          <p class="diamond stat">
+            <span class="ul">Diamond</span> - - ->
+            <span class="number" id="diamond-count">.</span>
+          </p>
+        </div> -->
       </div>
     </div>
-    <div class="game-stats">
-      <h2 class="stat ul" id="stats-title">
-        <a onclick="resetLocalStorage()" href="javascript:void(0);"
-          >Game Stats</a
-        >
-      </h2>
-      <p class="spins stat">
-        <span class="ul">Number of Spins</span> - - ->
-        <span class="number" id="num-spins">.</span>
-      </p>
-      <p class="win-spins stat">
-        <span class="ul">Wins</span> - - ->
-        <span class="number" id="win-spins">.</span>
-      </p>
-      <p class="lose-spins stat">
-        <span class="ul">Loses</span> - - ->
-        <span class="number" id="lose-spins">.</span>
-      </p>
-      <p class="most-spins stat">
-        <span class="ul">Most Spins</span> - - ->
-        <span class="number" id="most-spins">.</span>
-      </p>
-      <p class="least-spins stat">
-        <span class="ul">Least Spins</span> - - ->
-        <span class="number" id="least-spins">.</span>
-      </p>
+    <div id="win-popup" class="popup">
+      <div class="popup-content">
+        <div class="popup-header">
+          <img
+            id="popup-header-image"
+            src="Image/panel_gradient_head_night.png"
+            alt="Header Image"
+          />
+          <p class="header-text">Congratulations!</p>
+        </div>
+        <div class="popup-body">
+          <p>YOU WON</p>
+          <div class="reward-info">
+            <img id="win-icon" src="Image/coin.png" alt="Gold Icon" />
+            <span id="win-amount"></span>
+          </div>
+        </div>
+        <div class="popup-footer">
+          <button id="claim-btn">
+            <img
+              src="Image/btn_rectangle_green.png"
+              id="claim-btn-img"
+              alt="Claim Button"
+            />
+            <span class="claim-text">CLAIM</span>
+          </button>
+        </div>
+      </div>
     </div>
     <footer class="footer-container"></footer>
+ 
     <script src="script.js"></script>
   </body>
 </html>
