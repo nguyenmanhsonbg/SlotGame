@@ -1,5 +1,5 @@
 const iconIdsArr = ["#icon-1", "#icon-2", "#icon-3", "#icon-4", "#icon-5"];
-const goldConsumingAmount = 3;
+const goldConsumingAmount = 0;
 const goldRewardAmount = 4;
 const diamonRewardAmount = 4;
 const recieveGoldCondition = [1, 2, 3, 5, 6];
@@ -35,6 +35,11 @@ function playBackgroundMusic() {
       console.log("Autoplay error:", error);
     });
   }
+}
+
+function stopBackgroundMusic() {
+  backgroundMusic.pause();
+  backgroundMusic.currentTime = 0; // Reset to the beginning
 }
 
 // Function to play the spin sound
@@ -121,7 +126,6 @@ function winCondition(num1, num2, num3, spinCount) {
       LS.setItem("NUM_DIAMOND", DS.diamond);
       showPopup(diamonRewardAmount, "Image/diamond.png"); // Show popup with reward amount
     }
-    playWinningSound();
     refreshStats();
   }
 }
@@ -334,6 +338,7 @@ function showPopup(amount, icon) {
   $("#win-icon").attr("src", icon); // Set the correct icon
   const popup = $("#win-popup");
   popup.removeClass("hide").addClass("show").css("display", "block");
+  playWinningSound();
 }
 
 function hidePopup() {
@@ -348,9 +353,7 @@ function hidePopup() {
 $(document).ready(function () {
   disappear();
   cycleLightStyles();
-
   $("#spin-time-count").text(spinCount);
-
   if (typeof Storage !== "undefined") {
     DataStore = startStorage();
     refreshStats();
@@ -361,20 +364,24 @@ $(document).ready(function () {
   }
 
   $("#handle-btn").click(() => {
-    $("#handle-btn").attr("src", "Image/SlotHandlePush.png");
-    setTimeout(() => {
-      $("#handle-btn").attr("src", "Image/SlotHandle.png");
-    }, 200);
-    playSpinSound();
+    if (!isSpinning) {
+      playSpinSound();
+      $("#handle-btn").attr("src", "Image/SlotHandlePush.png");
+      setTimeout(() => {
+        $("#handle-btn").attr("src", "Image/SlotHandle.png");
+      }, 200);
+    }
     Play();
   });
 
   $("#spin-btn").click(() => {
-    $("#spin-btn").attr("src", "Image/SlotButtonPressed.png");
-    setTimeout(() => {
-      $("#spin-btn").attr("src", "Image/SlotButton.png");
-    }, 200);
-    playSpinSound();
+    if (!isSpinning) {
+      $("#spin-btn").attr("src", "Image/SlotButtonPressed.png");
+      setTimeout(() => {
+        $("#spin-btn").attr("src", "Image/SlotButton.png");
+      }, 200);
+      playSpinSound();
+    }
     Play();
   });
 

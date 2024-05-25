@@ -1,5 +1,5 @@
 body {
-  background-color: white; /* Match background color to image */
+  background-color: white;
   font-family: "Ranchers", cursive;
   display: flex;
   justify-content: center;
@@ -10,8 +10,8 @@ body {
 }
 
 .ray-img {
-  width: 50vw; /* Use viewport width for responsiveness */
-  height: 50vw; /* Maintain aspect ratio */
+  width: 50vw;
+  height: 50vw;
   width: 1150px;
   height: 1150px;
   position: absolute;
@@ -51,6 +51,7 @@ body {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
+  z-index: 1;
 }
 
 .stats {
@@ -236,8 +237,8 @@ body {
 }
 
 .reel img {
-  width: 45px; /* Adjust the width as needed */
-  height: auto; /* Maintain aspect ratio */
+  width: 45px;
+  height: auto;
 }
 
 .slot-handle {
@@ -304,23 +305,22 @@ body {
 }
 
 .popup {
-  display: none; /* Hidden by default */
+  display: none;
   position: fixed;
-  z-index: 9; /* Sit on top */
+  z-index: 9;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  overflow: auto;
 }
 
 .popup-content {
   background-color: #fff;
-  margin: 10% auto; /* 10% from the top and centered */
+  margin: 10% auto;
   padding: 0;
   border: 1px solid #888;
-  width: 300px; /* Width of the popup */
+  width: 300px;
   text-align: center;
   border-radius: 10px;
 }
@@ -356,7 +356,7 @@ body {
 }
 
 .popup-body img#win-icon {
-  width: 60px; /* Increased size */
+  width: 60px;
   height: auto;
 }
 
