@@ -1,7 +1,8 @@
+//#region define
+let currentUser = null;
+const usersData = {};
+
 const iconIdsArr = ["#icon-1", "#icon-2", "#icon-3", "#icon-4", "#icon-5"];
-const goldConsumingAmount = 0;
-const goldRewardAmount = 4;
-const diamonRewardAmount = 4;
 const recieveGoldCondition = [1, 2, 3, 5, 6];
 const recieveDiamondCondition = [0, 4];
 const slotClassArr = [".s1", ".s2", ".s3"];
@@ -16,17 +17,88 @@ const images = [
   "Image/slot-symbol7.png", // king
 ];
 
-let DataStore = { spins: 0, wins: 0, loses: 0, gold: 10, diamond: 0 };
+let DataStore = { spins: 0, wins: 0, loses: 0, gold: 0, diamond: 0 };
 const LocalStore = window.localStorage;
 let isSpinning = false;
-
-// script.js
 
 // Add references to the audio elements
 const backgroundMusic = document.getElementById("background-music");
 const winningSound = document.getElementById("winning-sound");
 const spinSound = document.getElementById("spin-sound");
 
+const goldBetAmountElement = document.getElementById("gold-bet-amount");
+let goldBetAmount = parseInt(goldBetAmountElement.textContent);
+//#endregion
+
+//#region login
+function login(username) {
+  currentUser = username;
+  loadUserData();
+  document.getElementById("login-modal").style.display = "none";
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById("login-modal").style.display = "block";
+}
+
+function saveUserData() {
+  if (currentUser) {
+    localStorage.setItem(
+      `slot_machine_${currentUser}`,
+      JSON.stringify(DataStore)
+    );
+  }
+}
+
+function loadUserData() {
+  if (currentUser) {
+    const data = localStorage.getItem(`slot_machine_${currentUser}`);
+    if (data) {
+      DataStore = JSON.parse(data);
+    } else {
+      DataStore = { spins: 0, wins: 0, loses: 0, gold: 5, diamond: 0 };
+    }
+    refreshStats();
+  }
+}
+
+document.getElementById("login-btn").addEventListener("click", () => {
+  const username = document.getElementById("username").value;
+  if (username) {
+    login(username);
+  }
+});
+
+// Get the modal
+const modal = document.getElementById("login-modal");
+
+// Get the <span> element that closes the modal
+const span = document.getElementsByClassName("close")[0];
+
+function showLoginModal() {
+  modal.style.display = "block";
+}
+
+// When the user clicks the button, open the modal
+window.onload = function () {
+  modal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+  modal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+//#endregion
+
+//#region audio
 // Function to play the background music
 function playBackgroundMusic() {
   if (backgroundMusic.paused) {
@@ -83,73 +155,10 @@ function handleFirstInteraction() {
 document.addEventListener("click", handleFirstInteraction);
 document.addEventListener("keydown", handleFirstInteraction);
 
-function rng(min, max) {
-  const rand = Math.random() * (max - min) + min;
-  return Math.floor(rand);
-}
+//#endregion
 
-function disappear() {
-  for (let i = 0; i < iconIdsArr.length; i++) {
-    for (let j = 0; j < slotClassArr.length; j++) {
-      $(`${slotClassArr[j]}`).find(`${iconIdsArr[i]}`).css("display", "none");
-    }
-  }
-}
+//#region lights
 
-function magicAct(num1, num2, num3) {
-  disappear();
-  for (let i = 0; i < iconIdsArr.length; i++) {
-    if (num1 == i) {
-      $(".s1").find(`${iconIdsArr[num1]}`).css("display", "initial");
-    }
-    if (num2 == i) {
-      $(".s2").find(`${iconIdsArr[num2]}`).css("display", "initial");
-    }
-    if (num3 == i) {
-      $(".s3").find(`${iconIdsArr[num3]}`).css("display", "initial");
-    }
-  }
-}
-
-function winCondition(num1, num2, num3, spinCount) {
-  if (num1 == num2 && num2 == num3) {
-    let DS = DataStore;
-    let LS = LocalStore;
-    DS.wins += goldRewardAmount;
-    LS.setItem("NUM_WINS", DS.wins);
-    if (recieveGoldCondition.includes(num1)) {
-      DS.gold += goldRewardAmount;
-      LS.setItem("NUM_GOLD", DS.gold);
-      showPopup(goldRewardAmount, "Image/coin.png"); // Show popup with reward amount
-    } else {
-      DS.diamond += diamonRewardAmount;
-      LS.setItem("NUM_DIAMOND", DS.diamond);
-      showPopup(diamonRewardAmount, "Image/diamond.png"); // Show popup with reward amount
-    }
-    refreshStats();
-  }
-}
-
-function startStorage() {
-  const LS = LocalStore;
-  let DS = DataStore;
-  if (LS.getItem("NUM_SPINS") !== null) {
-    DS.spins = parseInt(LS.getItem("NUM_SPINS"));
-    DS.wins = parseInt(LS.getItem("NUM_WINS"));
-    DS.loses = parseInt(LS.getItem("NUM_LOSES"));
-    DS.gold = parseInt(LS.getItem("NUM_GOLD"));
-    DS.diamond = parseInt(LS.getItem("NUM_DIAMOND"));
-  } else {
-    LS.setItem("NUM_SPINS", DS.spins);
-    LS.setItem("NUM_WINS", DS.wins);
-    LS.setItem("NUM_LOSES", DS.loses);
-    LS.setItem("NUM_GOLD", DS.gold);
-    LS.setItem("NUM_DIAMOND", DS.diamond);
-  }
-  return DS;
-}
-
-// New animation styles
 function blinkingLights() {
   clearInterval(window.lightInterval);
   const lightsOn = document.querySelectorAll(".light-on");
@@ -223,81 +232,42 @@ function cycleLightStyles() {
     currentIndex = (currentIndex + 1) % styles.length;
   }, 3000); // Switch style every 3 seconds
 }
+//#endregion
 
-function updateStat(statId, newValue) {
-  const statElement = $(statId);
-  const oldValue = parseInt(statElement.text());
-  statElement.text(newValue);
-
-  if (newValue > oldValue) {
-    statElement.addClass("increase");
-    setTimeout(() => {
-      statElement.removeClass("increase");
-    }, 500);
-  } else if (newValue < oldValue) {
-    statElement.addClass("decrease");
-    setTimeout(() => {
-      statElement.removeClass("decrease");
-    }, 500);
-  }
-}
-
-function refreshStats() {
-  let DS = DataStore;
-  updateStat("#spin-time-count", DS.spins);
-  updateStat("#win-count", DS.wins);
-  updateStat("#lose-count", DS.loses);
-  updateStat("#gold-count", DS.gold);
-  updateStat("#diamond-count", DS.diamond);
-  updateStat("#coin-count", DS.gold); // Display current gold amount
-  updateStat("#diamond-count", DS.diamond); // Display current diamond amount
-}
-
-function resetLocalStorage() {
-  const conf = confirm("Are you sure you want to reset your game stats?");
-  if (conf) {
-    DataStore = { spins: 0, wins: 0, loses: 0, gold: 10, diamond: 0 };
-    LocalStore.setItem("NUM_SPINS", 0);
-    LocalStore.setItem("NUM_WINS", 0);
-    LocalStore.setItem("NUM_LOSES", 0);
-    LocalStore.setItem("NUM_GOLD", 0);
-    LocalStore.setItem("NUM_DIAMOND", 0);
-    refreshStats();
-  }
-}
-
+//#region games
 function CheckResource() {
   var gold = DataStore.gold;
-  if (gold < goldConsumingAmount) {
-    console.log("Not enough gold !");
+  console.log("current amount gold" + gold);
+  if (gold <= 0 || gold < goldBetAmount) {
+    alert("Not enough gold to play!");
     return false;
   }
   return true;
 }
 
 function Play() {
+  if (!currentUser) {
+    showLoginModal();
+    return;
+  }
   if (!CheckResource() || isSpinning) {
     return;
   }
 
-  isSpinning = true; // Set spinning flag to true
-  $(".reel img").addClass("spinning");
+  DataStore.gold -= goldBetAmount;
+  refreshStats();
 
+  isSpinning = true;
+  $(".reel img").addClass("spinning");
   let dice = [];
   for (let i = 0; i < 3; i++) {
+    // dice.push(1);
     dice.push(Math.floor(Math.random() * images.length));
   }
 
-  DataStore.gold -= goldConsumingAmount;
   DataStore.spins += 1;
   spinCount = DataStore.spins;
-
-  localStorage.setItem("NUM_SPINS", DataStore.spins);
-  localStorage.setItem("NUM_GOLD", DataStore.gold);
-  $("#spin-time-count").text(spinCount);
-  refreshStats();
-  console.log(`DEBUG: (${dice[0]}, ${dice[1]}, ${dice[2]})`);
-
+  saveUserData();
   let spinIntervals = [];
   for (let i = 0; i < 3; i++) {
     spinIntervals.push(
@@ -318,7 +288,7 @@ function Play() {
   setTimeout(() => {
     winCondition(dice[0], dice[1], dice[2], spinCount);
     refreshStats();
-    isSpinning = false; // Reset spinning flag
+    isSpinning = false;
     stopSpinSound();
   }, Math.max(...delays) + 500);
 }
@@ -333,6 +303,175 @@ function displayResultForReel(reelIndex, result) {
   $(`.reel.s${reelIndex + 1}`).html(`<img src="${images[result]}" />`);
 }
 
+function refreshBetAmount() {
+  goldBetAmountElement.textContent = goldBetAmount;
+}
+
+function rng(min, max) {
+  const rand = Math.random() * (max - min) + min;
+  return Math.floor(rand);
+}
+
+function disappear() {
+  for (let i = 0; i < iconIdsArr.length; i++) {
+    for (let j = 0; j < slotClassArr.length; j++) {
+      $(`${slotClassArr[j]}`).find(`${iconIdsArr[i]}`).css("display", "none");
+    }
+  }
+}
+
+function magicAct(num1, num2, num3) {
+  disappear();
+  for (let i = 0; i < iconIdsArr.length; i++) {
+    if (num1 == i) {
+      $(".s1").find(`${iconIdsArr[num1]}`).css("display", "initial");
+    }
+    if (num2 == i) {
+      $(".s2").find(`${iconIdsArr[num2]}`).css("display", "initial");
+    }
+    if (num3 == i) {
+      $(".s3").find(`${iconIdsArr[num3]}`).css("display", "initial");
+    }
+  }
+}
+
+// Update your functions to save data after each change
+function winCondition(num1, num2, num3, spinCount) {
+  if (num1 == num2 && num2 == num3) {
+    let DS = DataStore;
+    DS.wins += 1;
+
+    if (recieveGoldCondition.includes(num1)) {
+      let goldRewardAmount = getGoldReward(num1);
+      DS.gold += getGoldReward(num1);
+      showPopup(goldRewardAmount, "Image/coin.png");
+    } else {
+      let diamonRewardAmount = getDiamondReward(num1);
+      DS.diamond += diamonRewardAmount;
+      showPopup(diamonRewardAmount, "Image/diamond.png");
+    }
+    refreshStats();
+    saveUserData(); // Save user data
+  }
+}
+
+//get gold reward base on item
+function getGoldReward(num) {
+  var rate = 0;
+  switch (num) {
+    //arrow x30
+    case 1:
+      rate = 30;
+      break;
+    //sword x30
+    case 2:
+      rate = 30;
+      break;
+    //magnet x30
+    case 3:
+      rate = 30;
+      break;
+    //toxic x30
+    case 5:
+      rate = 30;
+      break;
+    //king x 40
+    case 6:
+      rate = 40;
+      break;
+    default:
+      console.warn("Unknown num");
+  }
+  return rate * goldBetAmount;
+}
+
+function getDiamondReward(num) {
+  var rate = 0;
+  switch (num) {
+    //book x30
+    case 0:
+      rate = 30;
+      break;
+    //boom x50
+    case 4:
+      rate = 50;
+      break;
+    default:
+      console.warn("Unknown num");
+  }
+
+  return rate * goldBetAmount;
+}
+//#endregion
+
+//#region storage
+function startStorage() {
+  const LS = LocalStore;
+  let DS = DataStore;
+  if (LS.getItem("NUM_SPINS") !== null) {
+    DS.spins = parseInt(LS.getItem("NUM_SPINS"));
+    DS.gold = parseInt(LS.getItem("NUM_GOLD"));
+    DS.diamond = parseInt(LS.getItem("NUM_DIAMOND"));
+  } else {
+    LS.setItem("NUM_SPINS", DS.spins);
+    LS.setItem("NUM_GOLD", DS.gold);
+    LS.setItem("NUM_DIAMOND", DS.diamond);
+  }
+  return DS;
+}
+
+function resetLocalStorage() {
+  const conf = confirm("Are you sure you want to reset your game stats?");
+  if (conf) {
+    DataStore = { spins: 0, wins: 0, loses: 0, gold: 0, diamond: 0 };
+    saveUserData(); // Save user data
+    refreshStats();
+  }
+}
+
+//#endregion
+
+//#region stats
+function updateStat(statId, newValue) {
+  const statElement = $(statId);
+  const oldValue = parseInt(statElement.text());
+  statElement.text(newValue);
+
+  if (newValue > oldValue) {
+    statElement.addClass("increase");
+    setTimeout(() => {
+      statElement.removeClass("increase");
+    }, 500);
+  } else if (newValue < oldValue) {
+    statElement.addClass("decrease");
+    setTimeout(() => {
+      statElement.removeClass("decrease");
+    }, 500);
+  }
+}
+
+function refreshStats() {
+  let DS = DataStore;
+  let currentGold = DS.gold;
+  updateStat("#spin-time-count", DS.spins);
+  updateStat("#win-count", DS.wins);
+  updateStat("#lose-count", DS.loses);
+  updateStat("#gold-count", DS.gold);
+  updateStat("#diamond-count", DS.diamond);
+  updateStat("#coin-count", currentGold);
+  updateStat("#diamond-count", DS.diamond);
+
+  //reset amount bet gold when current bet gold more big than user gold
+  const goldBetAmountElement = document.getElementById("gold-bet-amount");
+  let currentGoldBetAmount = parseInt(goldBetAmountElement.textContent);
+  if (currentGold < currentGoldBetAmount) {
+    goldBetAmount = currentGold;
+    refreshBetAmount();
+  }
+}
+//#endregion
+
+//#region popup
 function showPopup(amount, icon) {
   $("#win-amount").text(amount);
   $("#win-icon").attr("src", icon); // Set the correct icon
@@ -349,13 +488,15 @@ function hidePopup() {
     stopWinningSound(); // Stop the winning sound when the popup is hidden
   }, 500); // Duration of the hide animation
 }
-
+//#endregion
 $(document).ready(function () {
   disappear();
   cycleLightStyles();
   $("#spin-time-count").text(spinCount);
   if (typeof Storage !== "undefined") {
-    DataStore = startStorage();
+    if (currentUser) {
+      loadUserData();
+    }
     refreshStats();
   } else {
     console.warn(
@@ -364,6 +505,10 @@ $(document).ready(function () {
   }
 
   $("#handle-btn").click(() => {
+    if (!currentUser) {
+      showLoginModal();
+      return;
+    }
     if (!isSpinning) {
       playSpinSound();
       $("#handle-btn").attr("src", "Image/SlotHandlePush.png");
@@ -375,6 +520,10 @@ $(document).ready(function () {
   });
 
   $("#spin-btn").click(() => {
+    if (!currentUser) {
+      showLoginModal();
+      return;
+    }
     if (!isSpinning) {
       $("#spin-btn").attr("src", "Image/SlotButtonPressed.png");
       setTimeout(() => {
@@ -393,9 +542,29 @@ $(document).ready(function () {
     }, 200);
   });
 
-  $(".ray-img").addClass("rotate");
-
-  $("#reset-btn").click(() => {
-    location.reload();
+  $("#increase-bet").click(() => {
+    if (!currentUser) {
+      showLoginModal();
+      return;
+    }
+    if (goldBetAmount < DataStore.gold) {
+      goldBetAmount += 1;
+      refreshBetAmount();
+    } else {
+      alert("Not enough gold to increase the bet!");
+    }
   });
+
+  $("#decrease-bet").click(() => {
+    if (!currentUser) {
+      showLoginModal();
+      return;
+    }
+    if (goldBetAmount > 1) {
+      goldBetAmount -= 1;
+      refreshBetAmount();
+    }
+  });
+
+  $(".ray-img").addClass("rotate");
 });

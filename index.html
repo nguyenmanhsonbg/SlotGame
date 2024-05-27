@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Slot Machine</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -28,8 +28,17 @@
           <img src="Image/coin.png" alt="Coin Icon" class="stat-icon" />
         </div>
       </div>
-      <div class="main-content">
+      <div class="main-content">   
         <div class="ray">
+            <!-- Login Form Modal -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Enter Username" class="login-input"/>
+      <button id="login-btn" class="login-btn">Login</button>
+    </div>
+  </div>
         <div class="slot-machine-container">
           <div class="slot-machine">
             <img src="Image/SlotBack.png" alt="Slot Back" class="slot-back"/>
@@ -84,16 +93,63 @@
               src="Image/SlotButtonTableLong.png"
               alt="Button Table"
               class="button-table"
-            />
-            <div class="reward-rules"></div>
+            />   
+          </div>
+          <div class="setting-bet">
+            <div class="bet-info">
+            <span id="gold-bet-amount">1</span>
+            <img src="Image/coin.png" alt="Coin Icon" id="gold-bet-icon"/></div>
+            <img src="Image/plus.png" alt="Plus Icon" class="bet-icon"  id="increase-bet"/>
+            <img src="Image/minus.png" alt="Minus Icon"  class="bet-icon" id="decrease-bet"/>
           </div>
           <img
           src="Image/SlotButton.png"
           alt="Spin Button"
           class="spin-button"
-          id="spin-btn"
-        />
+          id="spin-btn"/>
+          <div class="reward-rules">
+            <div class="col1">
+              <div class="row">
+                <img src="Image/slot-symbol5.png" alt="Bomb Icon" />
+                <span>= x50</span>
+                <img src="Image/coin.png" alt="Diamond Icon" />
+              </div>
+              <div class="row">
+                <img src="Image/slot-symbol7.png" alt="Crown Icon" />
+                <span>= x40</span>
+                <img src="Image/coin.png" alt="Coin Icon" />
+              </div>
+              <div class="row">
+                <img src="Image/slot-symbol4.png" alt="Magnet Icon" />
+                <span>= x30</span>
+                <img src="Image/coin.png" alt="Coin Icon" />
+              </div>
+              <div class="row">
+                <img src="Image/slot-symbol2.png" alt="Target Icon" />
+                <span>= x30</span>
+                <img src="Image/coin.png" alt="Coin Icon" />
+              </div>
+            </div>
+            <div class="col2">
+              <div class="row">
+                <img src="Image/slot-symbol6.png" alt="Wood Icon" />
+                <span>= x30</span>
+                <img src="Image/coin.png" alt="Diamond Icon" />
+              </div>
+              <div class="row">
+                <img src="Image/slot-symbol3.png" alt="Earth Icon" />
+                <span>= x30</span>
+                <img src="Image/coin.png" alt="Coin Icon" />
+              </div>
+              <div class="row">
+                <img src="Image/slot-symbol1.png" alt="Fish Icon" />
+                <span>= x30</span>
+                <img src="Image/coin.png" alt="Coin Icon" />
+              </div>
+            </div>
+          </div>
         </div>
+
         <div id="win-popup" class="popup">
           <div class="popup-content">
             <div class="popup-header">
