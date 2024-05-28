@@ -2,79 +2,186 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
     <title>Slot Machine</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
-       <!-- audio -->
-       <audio id="background-music" loop>
-        <source src="Sound/background-music.mp3" type="audio/mpeg">
-      </audio>
-      <audio id="winning-sound" loop>
-        <source src="Sound/winning-sound.mp3" type="audio/mpeg">
-      </audio>
-      <audio id="spin-sound" loop>
-        <source src="Sound/spin-sound.mp3" type="audio/mpeg">
-      </audio>
+    <!-- audio -->
+    <audio id="background-music" loop>
+      <source src="Sound/background-music.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="winning-sound" loop>
+      <source src="Sound/winning-sound.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="spin-sound" loop>
+      <source src="Sound/spin-sound.mp3" type="audio/mpeg" />
+    </audio>
     <img src="Image/rays.png" alt="Description of image" class="ray-img" />
     <div class="body-mini">
-      <div class="header">
-        <div class="stats">
-          <span id="diamond-count" class="stat-number">0</span>
-          <img src="Image/diamond.png" alt="Diamond Icon" class="stat-icon" />
-          <span id="coin-count" class="stat-number">0</span>
-          <img src="Image/coin.png" alt="Coin Icon" class="stat-icon" />
+      <div class="main-content">
+        <!-- Login Form Modal -->
+        <div id="login-modal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Login</h2>
+            <input
+              type="text"
+              id="username"
+              placeholder="Enter Username"
+              class="login-input"
+            />
+            <button id="login-btn" class="login-btn">Login</button>
+          </div>
         </div>
-      </div>
-      <div class="main-content">   
-        <div class="ray">
-            <!-- Login Form Modal -->
-  <div id="login-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Enter Username" class="login-input"/>
-      <button id="login-btn" class="login-btn">Login</button>
-    </div>
-  </div>
         <div class="slot-machine-container">
+          <div class="header">
+            <div class="stats">
+              <span id="coin-count" class="stat-number">0</span>
+              <img src="Image/coin.png" alt="Coin Icon" class="stat-icon" />
+            </div>
+          </div>
           <div class="slot-machine">
-            <img src="Image/SlotBack.png" alt="Slot Back" class="slot-back"/>
+            <img src="Image/SlotBack.png" alt="Slot Back" class="slot-back" />
             <div class="lights">
               <!-- lights on up ray -->
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light1" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light1" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light2" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light2" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light3" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light3" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light4" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light4" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light5" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light5" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light6" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light6" />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light1"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light1"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light2"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light2"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light3"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light3"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light4"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light4"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light5"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light5"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light6"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light6"
+              />
 
               <!-- lights on bottom ray -->
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light7" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light7" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light8" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light8" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light9" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light9" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light10" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light10" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light11" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light11" />
-              <img src="Image/lightoff.png" alt="Light Off" class="light-off light12" />
-              <img src="Image/lighton.png" alt="Light On" class="light-on light12" />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light7"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light7"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light8"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light8"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light9"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light9"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light10"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light10"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light11"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light11"
+              />
+              <img
+                src="Image/lightoff.png"
+                alt="Light Off"
+                class="light-off light12"
+              />
+              <img
+                src="Image/lighton.png"
+                alt="Light On"
+                class="light-on light12"
+              />
             </div>
             <div class="reels">
-              <div class="reel s1"><img src="Image/slot-symbol1.png" alt="default"></div>
-              <div class="reel s2"><img src="Image/slot-symbol1.png" alt="default"></div>
-              <div class="reel s3"><img src="Image/slot-symbol1.png" alt="default"></div>
+              <div class="reel s1">
+                <img src="Image/slot-symbol1.png" alt="default" />
+              </div>
+              <div class="reel s2">
+                <img src="Image/slot-symbol1.png" alt="default" />
+              </div>
+              <div class="reel s3">
+                <img src="Image/slot-symbol1.png" alt="default" />
+              </div>
             </div>
             <img
               src="Image/SlotFront.png"
@@ -93,20 +200,32 @@
               src="Image/SlotButtonTableLong.png"
               alt="Button Table"
               class="button-table"
-            />   
+            />
           </div>
           <div class="setting-bet">
             <div class="bet-info">
-            <span id="gold-bet-amount">1</span>
-            <img src="Image/coin.png" alt="Coin Icon" id="gold-bet-icon"/></div>
-            <img src="Image/plus.png" alt="Plus Icon" class="bet-icon"  id="increase-bet"/>
-            <img src="Image/minus.png" alt="Minus Icon"  class="bet-icon" id="decrease-bet"/>
+              <span id="gold-bet-amount">1</span>
+              <img src="Image/coin.png" alt="Coin Icon" id="gold-bet-icon" />
+            </div>
+            <img
+              src="Image/plus.png"
+              alt="Plus Icon"
+              class="bet-icon"
+              id="increase-bet"
+            />
+            <img
+              src="Image/minus.png"
+              alt="Minus Icon"
+              class="bet-icon"
+              id="decrease-bet"
+            />
           </div>
           <img
-          src="Image/SlotButton.png"
-          alt="Spin Button"
-          class="spin-button"
-          id="spin-btn"/>
+            src="Image/SlotButton.png"
+            alt="Spin Button"
+            class="spin-button"
+            id="spin-btn"
+          />
           <div class="reward-rules">
             <div class="col1">
               <div class="row">
@@ -179,10 +298,36 @@
             </div>
           </div>
         </div>
+
+        <div id="message-popup" class="popup">
+          <div class="popup-content">
+            <div class="popup-header">
+              <img
+                id="popup-header-image"
+                src="Image/panel_gradient_head_night.png"
+                alt="Header Image"
+              />
+              <p class="header-text">Message</p>
+            </div>
+            <div class="popup-body">
+              <p id="message-text"></p>
+            </div>
+            <div class="popup-footer">
+              <button id="message-close-btn">
+                <img
+                  src="Image/btn_rectangle_green.png"
+                  id="message-close-btn-img"
+                  alt="Close Button"
+                />
+                <span class="claim-text">CLOSE</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <footer class="footer-container"></footer>
- 
+
     <script src="script.js"></script>
   </body>
 </html>

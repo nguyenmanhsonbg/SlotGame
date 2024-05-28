@@ -26,8 +26,7 @@ const backgroundMusic = document.getElementById("background-music");
 const winningSound = document.getElementById("winning-sound");
 const spinSound = document.getElementById("spin-sound");
 
-const goldBetAmountElement = document.getElementById("gold-bet-amount");
-let goldBetAmount = parseInt(goldBetAmountElement.textContent);
+let goldBetAmount = 0;
 //#endregion
 
 //#region login
@@ -102,7 +101,7 @@ window.onclick = function (event) {
 // Function to play the background music
 function playBackgroundMusic() {
   if (backgroundMusic.paused) {
-    backgroundMusic.volume = 0.3;
+    backgroundMusic.volume = 0.1;
     backgroundMusic.play().catch((error) => {
       console.log("Autoplay error:", error);
     });
@@ -237,12 +236,19 @@ function cycleLightStyles() {
 //#region games
 function CheckResource() {
   var gold = DataStore.gold;
-  console.log("current amount gold" + gold);
-  if (gold <= 0 || gold < goldBetAmount) {
-    alert("Not enough gold to play!");
+  if (gold > 0) {
+    if (goldBetAmount == 0) {
+      showMessagePopup("Please increase bet gold!");
+      return false;
+    } else if (gold < goldBetAmount) {
+      showMessagePopup("Not enough gold to bet!");
+      return false;
+    }
+    return true;
+  } else {
+    showMessagePopup("Not enough gold to play!");
     return false;
   }
-  return true;
 }
 
 function Play() {
@@ -253,11 +259,10 @@ function Play() {
   if (!CheckResource() || isSpinning) {
     return;
   }
-
   DataStore.gold -= goldBetAmount;
   refreshStats();
-
   isSpinning = true;
+  playSpinSound();
   $(".reel img").addClass("spinning");
   let dice = [];
   for (let i = 0; i < 3; i++) {
@@ -304,7 +309,10 @@ function displayResultForReel(reelIndex, result) {
 }
 
 function refreshBetAmount() {
+  const goldBetAmountElement = document.getElementById("gold-bet-amount");
   goldBetAmountElement.textContent = goldBetAmount;
+  console.log("Gold bet amount:" + goldBetAmount);
+  console.log("Gold from screen:" + goldBetAmountElement.textContent);
 }
 
 function rng(min, max) {
@@ -462,12 +470,10 @@ function refreshStats() {
   updateStat("#diamond-count", DS.diamond);
 
   //reset amount bet gold when current bet gold more big than user gold
-  const goldBetAmountElement = document.getElementById("gold-bet-amount");
-  let currentGoldBetAmount = parseInt(goldBetAmountElement.textContent);
-  if (currentGold < currentGoldBetAmount) {
+  if (currentGold < goldBetAmount) {
     goldBetAmount = currentGold;
-    refreshBetAmount();
   }
+  refreshBetAmount();
 }
 //#endregion
 
@@ -488,6 +494,26 @@ function hidePopup() {
     stopWinningSound(); // Stop the winning sound when the popup is hidden
   }, 500); // Duration of the hide animation
 }
+
+// Function to show a custom message popup
+function showMessagePopup(message) {
+  $("#message-text").text(message);
+  const popup = $("#message-popup");
+  popup.removeClass("hide").addClass("show").css("display", "block");
+}
+
+function hideMessagePopup() {
+  const popup = $("#message-popup");
+  popup.removeClass("show").addClass("hide");
+  setTimeout(() => {
+    popup.css("display", "none");
+  }, 500); // Duration of the hide animation
+}
+
+// Event listener for the message close button
+$("#message-close-btn").click(() => {
+  hideMessagePopup();
+});
 //#endregion
 $(document).ready(function () {
   disappear();
@@ -510,7 +536,6 @@ $(document).ready(function () {
       return;
     }
     if (!isSpinning) {
-      playSpinSound();
       $("#handle-btn").attr("src", "Image/SlotHandlePush.png");
       setTimeout(() => {
         $("#handle-btn").attr("src", "Image/SlotHandle.png");
@@ -524,12 +549,12 @@ $(document).ready(function () {
       showLoginModal();
       return;
     }
+
     if (!isSpinning) {
       $("#spin-btn").attr("src", "Image/SlotButtonPressed.png");
       setTimeout(() => {
         $("#spin-btn").attr("src", "Image/SlotButton.png");
       }, 200);
-      playSpinSound();
     }
     Play();
   });
@@ -551,7 +576,7 @@ $(document).ready(function () {
       goldBetAmount += 1;
       refreshBetAmount();
     } else {
-      alert("Not enough gold to increase the bet!");
+      showMessagePopup("Not enough gold!");
     }
   });
 
