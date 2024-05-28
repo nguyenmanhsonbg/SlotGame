@@ -3,7 +3,7 @@ let currentUser = null;
 const usersData = {};
 
 const iconIdsArr = ["#icon-1", "#icon-2", "#icon-3", "#icon-4", "#icon-5"];
-const recieveGoldCondition = [1, 2, 3, 5, 6];
+const recieveGoldCondition = [0, 1, 2, 3, 4, 5, 6];
 const recieveDiamondCondition = [0, 4];
 const slotClassArr = [".s1", ".s2", ".s3"];
 let spinCount = 0;
@@ -26,7 +26,7 @@ const backgroundMusic = document.getElementById("background-music");
 const winningSound = document.getElementById("winning-sound");
 const spinSound = document.getElementById("spin-sound");
 
-let goldBetAmount = 0;
+let goldBetAmount = 1;
 //#endregion
 
 //#region login
@@ -266,7 +266,6 @@ function Play() {
   $(".reel img").addClass("spinning");
   let dice = [];
   for (let i = 0; i < 3; i++) {
-    // dice.push(1);
     dice.push(Math.floor(Math.random() * images.length));
   }
 
@@ -296,6 +295,10 @@ function Play() {
     isSpinning = false;
     stopSpinSound();
   }, Math.max(...delays) + 500);
+
+  if (DataStore.gold < goldBetAmount) {
+    resetBetAmount();
+  }
 }
 
 function changeSlotImages(slotIndex) {
@@ -308,11 +311,19 @@ function displayResultForReel(reelIndex, result) {
   $(`.reel.s${reelIndex + 1}`).html(`<img src="${images[result]}" />`);
 }
 
+function resetBetAmount() {
+  let DS = DataStore;
+  let currentGold = DS.gold;
+  //reset amount bet gold when current bet gold more big than user gold
+  if (currentGold < goldBetAmount) {
+    goldBetAmount = currentGold;
+  }
+  refreshBetAmount();
+}
+
 function refreshBetAmount() {
   const goldBetAmountElement = document.getElementById("gold-bet-amount");
   goldBetAmountElement.textContent = goldBetAmount;
-  console.log("Gold bet amount:" + goldBetAmount);
-  console.log("Gold from screen:" + goldBetAmountElement.textContent);
 }
 
 function rng(min, max) {
@@ -367,25 +378,33 @@ function winCondition(num1, num2, num3, spinCount) {
 function getGoldReward(num) {
   var rate = 0;
   switch (num) {
-    //arrow x30
+    //book x15
+    case 0:
+      rate = 15;
+      break;
+    //arrow x15
     case 1:
-      rate = 30;
+      rate = 15;
       break;
-    //sword x30
+    //sword x15
     case 2:
-      rate = 30;
+      rate = 15;
       break;
-    //magnet x30
+    //magnet x9
     case 3:
-      rate = 30;
+      rate = 9;
       break;
-    //toxic x30
+    //boom x50
+    case 4:
+      rate = 50;
+      break;
+    //toxic x15
     case 5:
-      rate = 30;
+      rate = 15;
       break;
-    //king x 40
+    //king x 25
     case 6:
-      rate = 40;
+      rate = 25;
       break;
     default:
       console.warn("Unknown num");
@@ -468,11 +487,6 @@ function refreshStats() {
   updateStat("#diamond-count", DS.diamond);
   updateStat("#coin-count", currentGold);
   updateStat("#diamond-count", DS.diamond);
-
-  //reset amount bet gold when current bet gold more big than user gold
-  if (currentGold < goldBetAmount) {
-    goldBetAmount = currentGold;
-  }
   refreshBetAmount();
 }
 //#endregion
@@ -576,7 +590,7 @@ $(document).ready(function () {
       goldBetAmount += 1;
       refreshBetAmount();
     } else {
-      showMessagePopup("Not enough gold!");
+      showMessagePopup("Not enough gold to bet");
     }
   });
 
