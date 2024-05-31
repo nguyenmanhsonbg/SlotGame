@@ -266,7 +266,8 @@ function Play() {
   $(".reel img").addClass("spinning");
   let dice = [];
   for (let i = 0; i < 3; i++) {
-    dice.push(Math.floor(Math.random() * images.length));
+    // dice.push(Math.floor(Math.random() * images.length));
+    dice.push(0);
   }
 
   DataStore.spins += 1;
@@ -586,11 +587,14 @@ $(document).ready(function () {
       showLoginModal();
       return;
     }
-    if (goldBetAmount < DataStore.gold) {
-      goldBetAmount += 1;
-      refreshBetAmount();
-    } else {
-      showMessagePopup("Not enough gold to bet");
+
+    if (!isSpinning) {
+      if (goldBetAmount < DataStore.gold) {
+        goldBetAmount += 1;
+        refreshBetAmount();
+      } else {
+        showMessagePopup("Not enough gold to bet");
+      }
     }
   });
 
@@ -599,9 +603,12 @@ $(document).ready(function () {
       showLoginModal();
       return;
     }
-    if (goldBetAmount > 1) {
-      goldBetAmount -= 1;
-      refreshBetAmount();
+
+    if (!isSpinning) {
+      if (goldBetAmount > 1) {
+        goldBetAmount -= 1;
+        refreshBetAmount();
+      }
     }
   });
 
